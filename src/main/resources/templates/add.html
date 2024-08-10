@@ -156,7 +156,10 @@
             body: JSON.stringify(formData)
         })
             .then(response => response.text())
-            .then(data => alert(data))
+            .then(() => {
+                alert("Данные успешно добавлены");
+                window.location.href = '/';
+            })
             .catch(error => console.error('Error:', error));
     }
 </script>

@@ -122,8 +122,7 @@
 
     function formatDate(date) {
         if (date) {
-            const formattedDate = new Date(date).toLocaleDateString();
-            return formattedDate;
+            return new Date(date).toLocaleDateString();
         }
         return 'N/A';
     }

@@ -1,4 +1,4 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.enums;
 
 import lombok.Getter;
 

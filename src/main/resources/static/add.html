@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Contract Form</h2>
+    <form id="contractForm">
+        <div class="form-group">
+            <label for="conclusionDate">Conclusion Date</label>
+            <input type="date" class="form-control" id="conclusionDate" name="conclusionDate" required>
+        </div>
+        <div class="form-group">
+            <label for="company">Company</label>
+            <select class="form-control" id="company" name="company" required>
+                <option value="" disabled selected>Select a company</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select class="form-control" id="type" name="type" required>
+                <option value="" disabled selected>Select a type</option>
+                <!-- Options will be populated dynamically -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="beginDate">Begin Date</label>
+            <input type="date" class="form-control" id="beginDate" name="beginDate" required>
+        </div>
+        <div class="form-group">
+            <label for="durationUnit">Duration</label>
+            <div class="d-flex">
+                <select class="form-control mr-2" id="durationUnit" name="durationUnit" required>
+                    <option value="" disabled selected>Select unit</option>
+                    <option value="days">Days</option>
+                    <option value="months">Months</option>
+                    <option value="years">Years</option>
+                </select>
+                <label for="durationValue"></label><input type="number" class="form-control" id="durationValue"
+                                                          name="durationValue" placeholder="Value" min="0" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fio">FIO</label>
+            <input type="text" class="form-control" id="fio" name="fio" required>
+        </div>
+        <div class="form-group">
+            <label for="contractNumber">Contract Number</label>
+            <input type="text" class="form-control" id="contractNumber" name="contractNumber" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="cost">Cost</label>
+            <input type="number" class="form-control" id="cost" name="cost" min="0" required>
+        </div>
+        <div class="form-group">
+            <label for="percentage">Percentage</label>
+            <input type="number" class="form-control" id="percentage" name="percentage" min="0" required>
+        </div>
+        <div class="form-group">
+            <label for="paymentsNumber">Payments Number</label>
+            <select class="form-control" id="paymentsNumber" name="paymentsNumber" required>
+                <option value="" disabled selected>Select a number</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitContract()">Submit</button>
+    </form>
+</div>
+
+<script>
+    function loadCompanies() {
+        fetch('/api/insurances/companies')
+            .then(response => response.json())
+            .then(data => {
+                const companySelect = document.getElementById('company');
+                data.forEach(company => {
+                    const option = document.createElement('option');
+                    option.value = company;
+                    option.textContent = company;
+                    companySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading companies:', error));
+    }
+
+    function loadTypes() {
+        fetch('/api/insurances/types')
+            .then(response => response.json())
+            .then(data => {
+                const typeSelect = document.getElementById('type');
+                data.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type;
+                    option.textContent = type;
+                    typeSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading types:', error));
+    }
+
+    window.onload = function () {
+        loadCompanies();
+        loadTypes();
+    };
+
+    function submitContract() {
+        // Получаем дату начала
+        const beginDate = new Date(document.getElementById('beginDate').value);
+        const durationUnit = document.getElementById('durationUnit').value;
+        const durationValue = parseInt(document.getElementById('durationValue').value, 10);
+
+        if (durationValue < 0) {
+            alert("Duration value must be non-negative");
+            return;
+        }
+
+        const newEndDate = new Date(beginDate);
+        if (durationUnit === "days") {
+            newEndDate.setDate(beginDate.getDate() + durationValue);
+        } else if (durationUnit === "months") {
+            newEndDate.setMonth(beginDate.getMonth() + durationValue);
+        } else if (durationUnit === "years") {
+            newEndDate.setFullYear(beginDate.getFullYear() + durationValue);
+        }
+
+        const formData = {
+            conclusionDate: document.getElementById('conclusionDate').value,
+            company: document.getElementById('company').value,
+            type: document.getElementById('type').value,
+            beginDate: document.getElementById('beginDate').value,
+            endDate: newEndDate.toISOString().split('T')[0],  // Форматируем в YYYY-MM-DD
+            fio: document.getElementById('fio').value.toUpperCase(),
+            contractNumber: document.getElementById('contractNumber').value,
+            phone: document.getElementById('phone').value,
+            cost: document.getElementById('cost').value,
+            percentage: document.getElementById('percentage').value,
+            paymentsNumber: document.getElementById('paymentsNumber').value
+        };
+
+        fetch('/api/insurances/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.text())
+            .then(data => alert(data))
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+</body>
+</html>

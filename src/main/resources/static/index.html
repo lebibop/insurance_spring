@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Data</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        .table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            text-align: left;
+            padding: 12px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ddd;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mb-4 text-center">Insurance Data</h1>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Conclusion Date</th>
+            <th>Company</th>
+            <th>Type</th>
+            <th>Begin Date</th>
+            <th>End Date</th>
+            <th>FIO</th>
+            <th>Contract Number</th>
+            <th>VIN</th>
+            <th>Cost</th>
+            <th>Percentage</th>
+            <th>Payments Number</th>
+            <th>KV1</th>
+            <th>KV2</th>
+            <th>Signature Date 1</th>
+            <th>Signature Date 2</th>
+            <th>Payment Date 1</th>
+            <th>Payment Date 2</th>
+        </tr>
+        </thead>
+        <tbody id="insuranceTableBody">
+        <!-- Data rows will be injected here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- JavaScript to fetch and display data -->
+<script>
+    async function fetchInsuranceData() {
+        try {
+            const response = await fetch('/api/insurances');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const insurances = await response.json();
+            const tableBody = document.querySelector('#insuranceTableBody');
+
+            tableBody.innerHTML = '';
+
+            insurances.forEach(insurance => {
+                const row = document.createElement('tr');
+
+                const properties = [
+                    formatDate(insurance.conclusionDate),
+                    insurance.company,
+                    insurance.type,
+                    formatDate(insurance.beginDate),
+                    formatDate(insurance.endDate),
+                    insurance.fio,
+                    insurance.contractNumber || 'N/A',
+                    insurance.phone,
+                    insurance.cost,
+                    insurance.percentage,
+                    insurance.paymentsNumber || 'N/A',
+                    insurance.kv1,
+                    insurance.kv2 || 'N/A',
+                    formatDate(insurance.signatureDate1),
+                    formatDate(insurance.signatureDate2),
+                    formatDate(insurance.paymentDate1),
+                    formatDate(insurance.paymentDate2)
+                ];
+
+                properties.forEach(property => {
+                    const cell = document.createElement('td');
+                    cell.textContent = property;
+                    row.appendChild(cell);
+                });
+
+                tableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error fetching insurance data:', error);
+        }
+    }
+
+    function formatDate(date) {
+        if (date) {
+            const formattedDate = new Date(date).toLocaleDateString();
+            return formattedDate;
+        }
+        return 'N/A';
+    }
+
+    document.addEventListener('DOMContentLoaded', fetchInsuranceData);
+</script>
+</body>
+</html>

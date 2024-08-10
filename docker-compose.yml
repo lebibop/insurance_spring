@@ -1,0 +1,27 @@
+version: '3.9'
+
+volumes:
+  insurance_project:
+
+services:
+  insurance_db:
+    image: 'postgres:16'
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db
+    volumes:
+      - insurance_project:/var/lib/postgresql/data
+
+  insurance_app:
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - insurance_db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://insurance_db:5432/db'

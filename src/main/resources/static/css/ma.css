@@ -1,0 +1,126 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    top: 0; /* Привязка к верхнему краю */
+    left: 0;
+}
+
+.container {
+    padding: 20px;
+    margin: 20px; /* Центрирование контейнера */
+    width: 100%; /* Ширина контейнера равна ширине экрана */
+    box-sizing: border-box;
+    top: 0; /* Привязка к верхнему краю */
+    left: 0;
+}
+
+.table {
+    width: 100%;
+    margin-top: 40px;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.table th, .table td {
+    text-align: center;
+    padding: 12px;
+}
+
+.table th {
+    background-color: #5758a6;
+    color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.table tr {
+    background-color: #ffffff !important; /* Устанавливаем одинаковый цвет для всех строк */
+}
+
+.table tr:hover td {
+    background-color: #5d5d5a !important; /* Цвет при наведении */
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+.selected td {
+    background-color: #5d5d5a !important; /* Цвет для выбранной строки */
+    color: #ffffff !important;
+}
+
+.table td:nth-child(6) {
+    text-align: left;
+    font-weight: bold;
+}
+
+
+.table td:nth-child(8), .table td:nth-child(7) {
+    text-align: left;
+}
+
+.table td:nth-child(1), .table td:nth-child(3), .table td:nth-child(9), .table td:nth-child(12), .table td:nth-child(14) {
+    font-weight: bold;
+}
+
+.search-container {
+    margin-bottom: 10px;
+}
+
+.search-container input {
+    width: 100%;
+    max-width: 300px; /* Устанавливает максимальную ширину поля поиска */
+}
+
+/*.search-container {*/
+/*    position: relative; !* Используйте 'relative' для позиционирования дочерних элементов относительно этого контейнера *!*/
+/*    margin: 20px; !* Пример отступа вокруг контейнера *!*/
+/*}*/
+
+/*!* Поле ввода поиска *!*/
+/*#searchInput {*/
+/*    position: absolute; !* Позволяет вам точно разместить элемент относительно его контейнера *!*/
+/*    top: 0; !* Отступ сверху *!*/
+/*    left: 500px; !* Отступ слева *!*/
+/*    width: 300px; !* Ширина поля ввода *!*/
+/*}*/
+
+/*!* Кнопка поиска *!*/
+/*#searchButton {*/
+/*    position: absolute; !* Позволяет вам точно разместить элемент относительно его контейнера *!*/
+/*    top: 0; !* Отступ сверху *!*/
+/*    left: 310px; !* Отступ слева, чтобы кнопка была справа от поля ввода *!*/
+/*}*/
+
+/*!* Кнопка "На главную" *!*/
+/*#showAll {*/
+/*    position: absolute; !* Позволяет вам точно разместить элемент относительно его контейнера *!*/
+/*    top: 50px; !* Отступ сверху, чтобы кнопка была ниже кнопки поиска *!*/
+/*    left: 0; !* Отступ слева, выравнивание с полем ввода *!*/
+/*}*/
+
+
+.mb-2 {
+    display: flex; /* Включает Flexbox для контейнера */
+    margin-left: 1600px;
+    gap: 10px; /* Расстояние между кнопками */
+}
+
+/* Кнопки внутри контейнера */
+.mb-2 .btn {
+    flex: 1;
+    min-width: 200px;
+}
+
+.mb-1 {
+    display: flex; /* Включает Flexbox для контейнера */
+    margin-left: 0;
+    gap: 10px; /* Расстояние между кнопками */
+}
+
+/* Кнопки внутри контейнера */
+.mb-1 .btn {
+    flex: 1;
+    min-width: 50px;
+}

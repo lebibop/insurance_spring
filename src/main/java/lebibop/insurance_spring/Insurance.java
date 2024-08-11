@@ -1,6 +1,5 @@
 package lebibop.insurance_spring;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,13 +29,7 @@ public class Insurance {
     @Column(name = "paymentsnumber")
     private Integer paymentsNumber;
     private Integer kv1;
+    private String status_kv1;
     private Integer kv2;
-    @Column(name = "signaturedate1")
-    private LocalDate signatureDate1;
-    @Column(name = "signaturedate2")
-    private LocalDate signatureDate2;
-    @Column(name = "paymentdate1")
-    private LocalDate paymentDate1;
-    @Column(name = "paymentdate2")
-    private LocalDate paymentDate2;
+    private String status_kv2;
 }

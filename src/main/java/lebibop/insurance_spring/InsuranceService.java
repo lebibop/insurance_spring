@@ -2,11 +2,9 @@ package lebibop.insurance_spring;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,14 +20,35 @@ public class InsuranceService{
 
     public List<Insurance> getInsurancesWithinTwoMonths() {
         LocalDate today = LocalDate.now();
-        LocalDate twoMonthsBefore = today.minusMonths(2);
         LocalDate twoMonthsAfter = today.plusMonths(2);
 
         return insuranceRepository.findAll().stream()
-                .filter(insurance -> insurance.getConclusionDate() != null &&
-                        !insurance.getEndDate().isBefore(twoMonthsBefore) &&
+                .filter(insurance ->
+                        !insurance.getEndDate().isBefore(today) &&
                         !insurance.getEndDate().isAfter(twoMonthsAfter))
+                .sorted((i1, i2) -> i2.getEndDate().compareTo(i1.getEndDate()))
                 .collect(Collectors.toList());
+    }
+
+    public Insurance updateInsuranceStatus(Integer id, String statusKV1, String statusKV2) {
+        Insurance insurance = insuranceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Insurance not found"));
+
+        insurance.setStatus_kv1(statusKV1);
+        insurance.setStatus_kv2(statusKV2);
+
+        return insuranceRepository.save(insurance);
+    }
+
+    public List<Insurance> searchInsurances(String query) {
+        return insuranceRepository.searchByQuery(query);
+    }
+
+    public Integer calculateProfitBetweenDates(LocalDate startDate, LocalDate endDate) {
+        return (int) insuranceRepository.findAll().stream()
+                .filter(insurance -> (!insurance.getConclusionDate().isBefore(startDate)  && !insurance.getConclusionDate().isAfter(endDate)))
+                .mapToDouble(insurance -> insurance.getKv1() * insurance.getPaymentsNumber())
+                .sum();
     }
 
     public Optional<Insurance> getInsuranceById(Integer id) {

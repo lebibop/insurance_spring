@@ -5,7 +5,7 @@ async function fetchCompanyColors() {
     try {
         const response = await fetch('/api/insurances/companies');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
         companyColors = await response.json();
     } catch (error) {
@@ -19,7 +19,7 @@ async function fetchInsuranceData() {
 
         const response = await fetch('/api/insurances');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
         const insurances = await response.json();
         renderTable(insurances);
@@ -43,11 +43,11 @@ function renderTable(insurances) {
             formatDate(insurance.beginDate),
             formatDate(insurance.endDate),
             insurance.fio,
-            insurance.contractNumber || 'N/A',
-            insurance.phone,
+            insurance.contractNumber,
+            insurance.phone || "N/A",
             insurance.cost,
             insurance.percentage,
-            insurance.paymentsNumber || 'N/A',
+            insurance.paymentsNumber,
             insurance.kv1,
             insurance.status_kv1,
             insurance.kv2,
@@ -71,8 +71,7 @@ function renderTable(insurances) {
 }
 
 function applyCellStyling(cell, index, property, insurance) {
-    // Change background color based on status_kv1
-    if (index === 12) { // Index of status_kv1 cell
+    if (index === 12) {
         switch (property) {
             case 'НЕТ':
                 cell.style.backgroundColor = 'white';
@@ -81,7 +80,7 @@ function applyCellStyling(cell, index, property, insurance) {
                 cell.style.backgroundColor = '#e7c58a';
                 break;
             case 'ВЫПЛАТА':
-                cell.style.backgroundColor = '#86b05d';
+                cell.style.backgroundColor = '#809671';
                 cell.style.color = 'white';
                 break;
             default:
@@ -89,13 +88,12 @@ function applyCellStyling(cell, index, property, insurance) {
         }
     }
 
-    // Check kv2 and status_kv2
-    if (index === 13 || index === 14) { // Indexes of kv2 and status_kv2 cells
+    if (index === 13 || index === 14) {
         const kv2 = insurance.kv2;
         if (kv2 === 'N/A' || kv2 === '' || kv2 === null) {
-            cell.style.backgroundColor = 'grey';
-            cell.textContent = ''; // Clear text
-        } else if (index === 14) { // For status_kv2, if kv2 is not empty
+            cell.style.backgroundColor = '#fefae0';
+            cell.textContent = '';
+        } else if (index === 14) {
             switch (property) {
                 case 'НЕТ':
                     cell.style.backgroundColor = 'white';
@@ -104,7 +102,7 @@ function applyCellStyling(cell, index, property, insurance) {
                     cell.style.backgroundColor = '#e7c58a';
                     break;
                 case 'ВЫПЛАТА':
-                    cell.style.backgroundColor = '#86b05d';
+                    cell.style.backgroundColor = '#809671';
                     cell.style.color = 'white';
                     break;
                 default:
@@ -113,7 +111,6 @@ function applyCellStyling(cell, index, property, insurance) {
         }
     }
 
-    // Color the first 8 cells based on company
     if (index < 8) {
         cell.style.backgroundColor = companyColors[insurance.company] || "#ffffff";
     }
@@ -133,9 +130,8 @@ function showEditModal(insurance) {
 
     statusKV1Select.value = insurance.status_kv1;
     statusKV2Select.value = insurance.status_kv2 || null;
-    document.getElementById('rowId').value = insurance.id; // Use real ID
+    document.getElementById('rowId').value = insurance.id;
 
-    // Show or hide KV2 select based on paymentsNumber
     if (insurance.paymentsNumber === 2) {
         kv2Group.classList.remove('d-none');
     } else {
@@ -151,7 +147,7 @@ document.getElementById('saveChanges').addEventListener('click', async () => {
     const rowId = document.getElementById('rowId').value;
 
     if (!rowId) {
-        alert('No row selected');
+        alert('Строчка не выбрана');
         return;
     }
 
@@ -168,7 +164,7 @@ document.getElementById('saveChanges').addEventListener('click', async () => {
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
 
         // Refresh data
@@ -182,7 +178,7 @@ document.getElementById('saveChanges').addEventListener('click', async () => {
 });
 
 document.getElementById('addInsurance').addEventListener('click', () => {
-    window.location.href = '/add';  // Redirect to the /add page
+    window.location.href = '/add';
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -191,29 +187,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add click event listener to rows
     document.querySelector('#insuranceTableBody').addEventListener('click', function (e) {
         const row = e.target.closest('tr');
-        if (!row) return; // Click outside the rows
+        if (!row) return;
 
-        // Clear previous selection
         document.querySelectorAll('#insuranceTableBody tr').forEach(tr => {
             tr.classList.remove('selected');
         });
 
-        // Highlight selected row
         row.classList.add('selected');
 
-        // Set selected row ID
         selectedRowId = row.dataset.id;
     });
 });
 
 document.getElementById('deleteSelected').addEventListener('click', async () => {
     if (!selectedRowId) {
-        alert('No row selected');
+        alert('Строчка не выбрана');
         return;
     }
 
-    // Ask for confirmation
-    const confirmDelete = confirm('Are you sure you want to delete this record?');
+    const confirmDelete = confirm('Точно хотите удалить эту строчку?');
     if (!confirmDelete) {
         return;
     }
@@ -224,13 +216,11 @@ document.getElementById('deleteSelected').addEventListener('click', async () => 
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
 
-        // Refresh data
         await fetchInsuranceData();
 
-        // Clear the selected row ID
         selectedRowId = null;
     } catch (error) {
         console.error('Error deleting insurance data:', error);
@@ -241,19 +231,19 @@ document.getElementById('searchButton').addEventListener('click', async () => {
     const query = document.getElementById('searchInput').value;
 
     if (!query) {
-        alert('Search query cannot be empty.');
-        return; // Stop execution if the query is empty
+        alert('Поиск не может быть по пустому полю!');
+        return;
     }
 
     try {
         const response = await fetch(`/api/insurances/search?query=${encodeURIComponent(query)}`);
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
         const data = await response.json();
 
         if (data.length === 0) {
-            alert('No results found.');
+            alert('Ничего не найдено!');
             window.location.href = '/';
         } else {
             renderTable(data);
@@ -269,8 +259,6 @@ document.getElementById('showAll').addEventListener('click', () => {
 });
 
 
-
-
 document.getElementById('NearP').addEventListener('click', () => {
     fetchInsurancesNearConclusionDate();
 });
@@ -279,10 +267,10 @@ async function fetchInsurancesNearConclusionDate() {
     try {
         const response = await fetch('/api/insurances/near-conclusion-date');
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
         const insurances = await response.json();
-        renderTable(insurances); // Обновляем таблицу с новыми данными
+        renderTable(insurances);
     } catch (error) {
         console.error('Error fetching insurances near conclusion date:', error);
     }
@@ -294,18 +282,17 @@ document.getElementById('calculateProfitButton').addEventListener('click', () =>
     $('#profitModal').modal('show');
 });
 
-// Calculate profit when button is clicked
 document.getElementById('calculateProfit').addEventListener('click', async () => {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
 
     if (!startDate || !endDate) {
-        alert('Please enter both start and end dates.');
+        alert('Введите даты начала и конца!');
         return;
     }
 
     if (startDate > endDate) {
-        alert('Start date cannot be later than end date.');
+        alert('Начальная дата не может быть позже даты окончания');
         return;
     }
 
@@ -315,13 +302,12 @@ document.getElementById('calculateProfit').addEventListener('click', async () =>
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('Проблемы с сетью');
         }
 
         const profit = await response.json();
-        document.getElementById('profitResult').textContent = `Total Profit: ${profit}`;
+        document.getElementById('profitResult').textContent = `Прибыль за период: ${profit}`;
     } catch (error) {
-        console.error('Error calculating profit:', error);
-        document.getElementById('profitResult').textContent = 'Error calculating profit.';
+        document.getElementById('profitResult').textContent = 'Ошибка подсчета прибыли';
     }
 });

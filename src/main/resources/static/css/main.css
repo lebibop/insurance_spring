@@ -4,6 +4,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     top: 0; /* Привязка к верхнему краю */
     left: 0;
+    background-color: #fefae0;
 }
 
 .container {
@@ -28,7 +29,7 @@ body {
 }
 
 .table th {
-    background-color: #5758a6;
+    background-color: #124168;
     color: #ffffff;
     text-align: center;
     vertical-align: middle;
@@ -103,24 +104,29 @@ body {
 
 .mb-2 {
     display: flex; /* Включает Flexbox для контейнера */
-    margin-left: 1600px;
+    margin-left: 1000px;
     gap: 10px; /* Расстояние между кнопками */
+    align-items: flex-start;
 }
 
 /* Кнопки внутри контейнера */
 .mb-2 .btn {
     flex: 1;
     min-width: 200px;
+    min-height: 60px;
 }
 
-.mb-1 {
+
+.search-container {
     display: flex; /* Включает Flexbox для контейнера */
-    margin-left: 0;
-    gap: 10px; /* Расстояние между кнопками */
+    align-items: center; /* Выровнять элементы по вертикали */
+    gap: 10px; /* Расстояние между строкой поиска и кнопкой */
 }
 
-/* Кнопки внутри контейнера */
-.mb-1 .btn {
-    flex: 1;
-    min-width: 50px;
+#searchInput {
+    flex: 1; /* Занимает оставшееся пространство в контейнере */
+}
+
+#searchButton {
+    white-space: nowrap; /* Предотвращает перенос текста на кнопку */
 }

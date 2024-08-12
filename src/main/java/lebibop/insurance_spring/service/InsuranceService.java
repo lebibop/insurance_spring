@@ -1,5 +1,7 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.service;
 
+import lebibop.insurance_spring.entity.Insurance;
+import lebibop.insurance_spring.repository.InsuranceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

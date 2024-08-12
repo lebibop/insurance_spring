@@ -3,264 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contract Form</title>
+    <title>Добавление нового полиса</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .form-group {
-            margin-bottom: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/add.css}" href="/css/add.css">
 </head>
 <body>
 
 <div class="container mt-5">
-    <h2>Contract Form</h2>
+    <h2>Добавление нового полиса</h2>
     <form id="contractForm">
         <div class="form-group">
-            <label for="conclusionDate">Conclusion Date</label>
+            <label for="conclusionDate">Дата</label>
             <input type="date" class="form-control" id="conclusionDate" name="conclusionDate" required>
         </div>
         <div class="form-group">
-            <label for="company">Company</label>
+            <label for="company">Компания</label>
             <select class="form-control" id="company" name="company" required>
-                <option value="" disabled selected>Select a company</option>
+                <option value="" disabled selected>Выберите компанию</option>
                 <!-- Options will be populated dynamically -->
             </select>
         </div>
         <div class="form-group">
-            <label for="type">Type</label>
+            <label for="type">Вид полиса</label>
             <select class="form-control" id="type" name="type" required>
-                <option value="" disabled selected>Select a type</option>
+                <option value="" disabled selected>Выберите вид полиса</option>
                 <!-- Options will be populated dynamically -->
             </select>
         </div>
         <div class="form-group">
-            <label for="beginDate">Begin Date</label>
+            <label for="beginDate">Начало</label>
             <input type="date" class="form-control" id="beginDate" name="beginDate" required>
         </div>
         <div class="form-group">
-            <label for="durationUnit">Duration</label>
+            <label for="durationUnit">Продолжительность</label>
             <div class="d-flex">
                 <select class="form-control mr-2" id="durationUnit" name="durationUnit" required>
-                    <option value="" disabled selected>Select unit</option>
-                    <option value="days">Days</option>
-                    <option value="months">Months</option>
-                    <option value="years">Years</option>
+                    <option value="" disabled selected>день/месяц/год</option>
+                    <option value="days">День</option>
+                    <option value="months">Месяц</option>
+                    <option value="years">Год</option>
                 </select>
                 <label for="durationValue"></label><input type="number" class="form-control" id="durationValue" name="durationValue" placeholder="Value" min="0" required>
             </div>
         </div>
         <div class="form-group">
-            <label for="fio">FIO</label>
+            <label for="fio">ФИО</label>
             <input type="text" class="form-control" id="fio" name="fio" required>
         </div>
         <div class="form-group">
-            <label for="contractNumber">Contract Number</label>
+            <label for="contractNumber">№ договора</label>
             <input type="text" class="form-control" id="contractNumber" name="contractNumber" required>
         </div>
         <div class="form-group">
-            <label for="phone">Phone</label>
+            <label for="phone">Телефон (без +7)</label>
             <input type="text" class="form-control" id="phone" name="phone" required>
         </div>
         <div class="form-group">
-            <label for="cost">Cost</label>
+            <label for="cost">Стоимость</label>
             <input type="number" class="form-control" id="cost" name="cost" min="0" required>
         </div>
         <div class="form-group">
-            <label for="percentage">Percentage</label>
+            <label for="percentage">% КВ</label>
             <input type="number" class="form-control" id="percentage" name="percentage" min="0" required>
         </div>
         <div class="form-group">
-            <label for="paymentsNumber">Payments Number</label>
+            <label for="paymentsNumber">Кол-во выплат</label>
             <select class="form-control" id="paymentsNumber" name="paymentsNumber" required>
-                <option value="" disabled selected>Select a number</option>
+                <option value="" disabled selected>Выберите значение</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
             </select>
         </div>
-        <button type="button" class="btn btn-primary" onclick="submitContract()">Submit</button>
+        <button type="button" class="btn btn-primary" onclick="submitContract()">Отправить</button>
+        <button type="button" id="CancelButton" class="btn btn-primary">Отмена</button>
     </form>
 </div>
 
-<script>
-    function formatPhoneNumber(value) {
-        const cleaned = ('' + value).replace(/\D/g, '');
-
-        if (cleaned.length > 0 && cleaned.length < 10) return value;
-
-        const match = cleaned.match(/^(\d{3})(\d{3})(\d{2})(\d{2})$/);
-        if (match) {
-            return `+7(${match[1]})-${match[2]}-${match[3]}-${match[4]}`;
-        }
-        return value;
-    }
-
-    document.getElementById('phone').addEventListener('input', function (e) {
-        e.target.value = formatPhoneNumber(e.target.value);
-    });
-
-
-    async function loadCompanies() {
-        try {
-            const response = await fetch('/api/insurances/companies');
-            if (!response.ok) throw new Error('Network response was not ok');
-            const companies = await response.json();
-            const companySelect = document.getElementById('company');
-            for (const [name, color] of Object.entries(companies)) {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                option.style.backgroundColor = color;
-                companySelect.appendChild(option);
-            }
-        } catch (error) {
-            console.error('Error loading companies:', error);
-        }
-    }
-
-
-    async function loadTypes() {
-        try {
-            const response = await fetch('/api/insurances/types');
-            if (!response.ok) throw new Error('Network response was not ok');
-            const types = await response.json();
-            const typeSelect = document.getElementById('type');
-            types.forEach(type => {
-                const option = document.createElement('option');
-                option.value = type;
-                option.textContent = type;
-                typeSelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error loading types:', error);
-        }
-    }
-
-    window.onload = function () {
-        loadCompanies();
-        loadTypes();
-    };
-
-    function submitContract() {
-        const beginDate = new Date(document.getElementById('beginDate').value);
-        const durationUnit = document.getElementById('durationUnit').value;
-        const durationValue = parseInt(document.getElementById('durationValue').value, 10);
-
-        if (isNaN(new Date(document.getElementById('conclusionDate').value).getTime())) {
-            alert("Please select a valid conclusion date");
-            return;
-        }
-
-        if (document.getElementById('company').value === "") {
-            alert("Please select a company");
-            return;
-        }
-
-        if (document.getElementById('type').value === "") {
-            alert("Please select a type");
-            return;
-        }
-
-        if (isNaN(beginDate.getTime())) {
-            alert("Please select a valid begin date");
-            return;
-        }
-
-        if (document.getElementById('durationUnit').value === "") {
-            alert("Please select a duration unit");
-            return;
-        }
-
-        if (isNaN(durationValue) || durationValue < 0) {
-            alert("Duration value must be a non-negative number");
-            return;
-        }
-
-        if (document.getElementById('fio').value === "") {
-            alert("Please select a fio");
-            return;
-        }
-
-        if (document.getElementById('contractNumber').value === "") {
-            alert("Please select a fio");
-            return;
-        }
-
-        if (document.getElementById('phone').value.length > 0 && document.getElementById('phone').value.length < 10) {
-            alert("inc ohone");
-            return;
-        }
-
-
-
-
-        const cost = parseFloat(document.getElementById('cost').value);
-        const percentage = parseFloat(document.getElementById('percentage').value);
-        const paymentsNumber = parseInt(document.getElementById('paymentsNumber').value, 10);
-
-
-        if (isNaN(cost) || isNaN(percentage) || isNaN(paymentsNumber) || cost < 0 || percentage < 0 || paymentsNumber <= 0) {
-            alert("Cost, percentage, and payments number must be valid numbers. Payments number must be greater than 0.");
-            return;
-        }
-
-        const amountPerPayment = (cost * (percentage / 100)) / paymentsNumber;
-
-        let kv2 = null;
-        let status_kv2 = null;
-
-        if (paymentsNumber === 2) {
-            kv2 = amountPerPayment;
-            status_kv2 = "НЕТ";
-        }
-
-        const newEndDate = new Date(beginDate);
-        if (durationUnit === "days") {
-            newEndDate.setDate(beginDate.getDate() + durationValue);
-        } else if (durationUnit === "months") {
-            newEndDate.setMonth(beginDate.getMonth() + durationValue);
-        } else if (durationUnit === "years") {
-            newEndDate.setFullYear(beginDate.getFullYear() + durationValue);
-        }
-
-        newEndDate.setDate(beginDate.getDate() - 1);
-
-        const formData = {
-            conclusionDate: document.getElementById('conclusionDate').value,
-            company: document.getElementById('company').value,
-            type: document.getElementById('type').value,
-            beginDate: document.getElementById('beginDate').value,
-            endDate: newEndDate.toISOString().split('T')[0],  // Форматируем в YYYY-MM-DD
-            fio: document.getElementById('fio').value.toUpperCase(),
-            contractNumber: document.getElementById('contractNumber').value.toUpperCase(),
-            phone: document.getElementById('phone').value,
-            cost: document.getElementById('cost').value,
-            percentage: document.getElementById('percentage').value,
-            paymentsNumber: document.getElementById('paymentsNumber').value,
-            kv1: amountPerPayment,
-            status_kv1: "НЕТ",
-            kv2: kv2,
-            status_kv2: status_kv2,
-        };
-
-        fetch('/api/insurances/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => response.text())
-            .then(() => {
-                alert("Data successfully added");
-                window.location.href = '/';
-            })
-            .catch(error => {
-                console.error('Error submitting data:', error);
-                alert("There was an error submitting the data. Please try again.");
-            });
-    }
-</script>
+<script type="text/javascript" th:src="@{js/add.js}" src="/js/add.js"></script>
 
 </body>
 </html>

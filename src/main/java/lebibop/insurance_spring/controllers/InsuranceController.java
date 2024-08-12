@@ -1,4 +1,4 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class InsuranceController {
     @GetMapping("/")
     public String startingPage() {
-        return "index";
+        return "main";
     }
 
     @GetMapping("/add")

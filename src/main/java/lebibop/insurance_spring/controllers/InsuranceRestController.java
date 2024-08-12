@@ -1,5 +1,7 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.controllers;
 
+import lebibop.insurance_spring.entity.Insurance;
+import lebibop.insurance_spring.service.InsuranceService;
 import lebibop.insurance_spring.enums.COMPANY;
 import lebibop.insurance_spring.enums.TYPE;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

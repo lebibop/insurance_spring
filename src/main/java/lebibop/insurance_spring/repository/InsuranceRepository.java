@@ -1,5 +1,6 @@
-package lebibop.insurance_spring;
+package lebibop.insurance_spring.repository;
 
+import lebibop.insurance_spring.entity.Insurance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

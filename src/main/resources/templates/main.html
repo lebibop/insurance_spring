@@ -7,27 +7,33 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/ma.css}" href="/css/ma.css">
+    <link rel="stylesheet" th:href="@{/css/main.css}" href="/css/main.css">
 </head>
 <body>
 <div class="container">
-    <h1 class="mb-4 text-center">Самый успешный центр страхования в мире</h1>
+
 
     <div class="search-container">
-        <label for="searchInput"></label><input type="text" id="searchInput" class="form-control" placeholder="Введите запрос для поиска">
-        <button type="button" class="btn btn-primary mt-2" id="searchButton">Поиск</button>
-        <button id="showAll" class="btn btn-primary">На главную</button>
+        <label for="searchInput"></label><input type="text" id="searchInput" class="form-control"
+                                                placeholder="Введите запрос для поиска">
+        <button type="button" class="btn btn-primary mt-2" id="searchButton" style="background: #c4661f; border: 0">
+            ПОИСК
+        </button>
     </div>
-
-    <div class="mb-1">
-        <button type="button" class="btn btn-primary" id="addInsurance">+Добавить полис</button>
-        <button type="button" class="btn btn-danger" id="deleteSelected">-Удалить полис</button>
-    </div>
-
-
     <div class="mb-2">
-        <button type="button" class="btn btn-primary" id="NearP">Пролонгация<br>за 2 месяца</button>
-        <button type="button" class="btn btn-primary" id="calculateProfitButton">Прибыль<br>за период</button>
+        <button id="showAll" class="btn btn-primary" style="background: #b99470; border: 0">НА ГЛАВНУЮ</button>
+        <button type="button" class="btn btn-primary" id="addInsurance" style="background: #c4661f; border: 0">+ДОБАВИТЬ
+            ПОЛИС
+        </button>
+        <button type="button" class="btn btn-danger" id="deleteSelected" style="background: #783d19; border: 0">-УДАЛИТЬ
+            ПОЛИС
+        </button>
+        <button type="button" class="btn btn-primary" id="NearP" style="background: #b99470; border: 0">ПРОЛОНГАЦИЯ<br>ЗА
+            2 МЕСЯЦА
+        </button>
+        <button type="button" class="btn btn-primary" id="calculateProfitButton" style="background: #b99470; border: 0">
+            ПРИБЫЛЬ<br>ЗА ПЕРИОД
+        </button>
     </div>
 
     <table class="table table-bordered">
@@ -98,7 +104,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="profitModal" tabindex="-1" role="dialog" aria-labelledby="profitModalLabel" aria-hidden="true">
+<div class="modal fade" id="profitModal" tabindex="-1" role="dialog" aria-labelledby="profitModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -132,7 +139,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script type="text/javascript" th:src="@{js/a.js}" src="/js/a.js"></script>
+<script type="text/javascript" th:src="@{js/main.js}" src="/js/main.js"></script>
 
 </body>
 </html>

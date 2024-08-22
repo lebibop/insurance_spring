@@ -1,11 +1,8 @@
 version: '3.9'
 
-volumes:
-  insurance_project:
-
 services:
   insurance_db:
-    image: 'postgres:16'
+    image: lebibop/insurance_db_image
     restart: always
     ports:
       - "5432:5432"
@@ -13,12 +10,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=db
-    volumes:
-      - insurance_project:/var/lib/postgresql/data
 
   insurance_app:
+    image: lebibop/insurance_app_image
     restart: always
-    build: .
     ports:
       - "8080:8080"
     depends_on:

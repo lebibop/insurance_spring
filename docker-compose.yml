@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   insurance_db:
-    image: lebibop/insurance_db_image
+    image: 'postgres:16'
     restart: always
     ports:
       - "5432:5432"
@@ -12,7 +12,7 @@ services:
       - POSTGRES_DB=db
 
   insurance_app:
-    image: lebibop/insurance_app_image
+    build: .
     restart: always
     ports:
       - "8080:8080"
